@@ -11,3 +11,5 @@ logs
 supabase/.temp
 supabase/.branches
 .playwright-mcp
+.vercel
+.env*
