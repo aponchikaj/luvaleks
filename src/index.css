@@ -1,0 +1,92 @@
+@import 'tailwindcss';
+
+/* heyclicky blue + black + white, dressed as macOS (system greys, SF type, soft shadows). */
+@theme {
+  --color-clicky: #1d6ee5;
+  --color-clicky-bright: #0f7fff;
+  --color-clicky-deep: #221898;
+  --color-clicky-200: #9ec5ff;
+  --color-clicky-100: #d6e6ff;
+  --color-ink: #0a0a0a;
+  --color-paper: #fbfbfb;
+  --color-chrome: #d9d9de;
+  --color-chrome-light: #f2f2f7;
+  --color-chrome-dark: #6e6e73;
+
+  --color-note-blue: #9ec5ff;
+  --color-note-sky: #d6e6ff;
+  --color-note-yellow: #fff7a8;
+  --color-note-pink: #ffd6e6;
+  --color-note-mint: #d6fffb;
+  --color-note-white: #ffffff;
+
+  /* SF Pro on Apple devices, Inter everywhere else. */
+  --font-sans: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Inter', system-ui, sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', Menlo, monospace;
+  --font-serif: 'Instrument Serif', ui-serif, Georgia, serif;
+
+  --shadow-window: 0 0 0 0.5px rgb(0 0 0 / 0.22), 0 22px 60px -8px rgb(0 0 0 / 0.4), 0 8px 18px -6px rgb(0 0 0 / 0.18);
+  --shadow-window-inactive: 0 0 0 0.5px rgb(0 0 0 / 0.16), 0 14px 34px -10px rgb(0 0 0 / 0.28);
+  --shadow-card: 0 0 0 0.5px rgb(0 0 0 / 0.08), 0 1px 3px rgb(0 0 0 / 0.1), 0 6px 16px -8px rgb(0 0 0 / 0.18);
+}
+
+@layer base {
+  html {
+    background: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection {
+    background: var(--color-clicky);
+    color: #fff;
+  }
+}
+
+/* Custom cursors (macOS arrow + hand, or pixel hearts — switch in the ♥ menu).
+   --cursor-arrow / --cursor-pointer are set by lib/cursor.js. */
+html[data-cursor],
+html[data-cursor] body {
+  cursor: var(--cursor-arrow), auto;
+}
+html[data-cursor] :is(a, button, [role='button'], summary, label, select, .leaflet-interactive, .leaflet-container a) {
+  cursor: var(--cursor-pointer), pointer;
+}
+html[data-cursor] :is(input, textarea, [contenteditable]) {
+  cursor: text;
+}
+html[data-cursor] .leaflet-grab {
+  cursor: var(--cursor-arrow), grab;
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+}
+
+.glass {
+  background: rgb(255 255 255 / 0.22);
+  backdrop-filter: blur(30px) saturate(180%);
+  -webkit-backdrop-filter: blur(30px) saturate(180%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
+
+.leaflet-container {
+  font-family: var(--font-sans);
+}
+.leaflet-popup-content-wrapper {
+  border-radius: 12px;
+  box-shadow: var(--shadow-window);
+}
+
+/* Monochrome map tiles so the blue heart markers stand out. */
+.luv-tiles {
+  filter: grayscale(1) contrast(1.05) brightness(1.03);
+}
