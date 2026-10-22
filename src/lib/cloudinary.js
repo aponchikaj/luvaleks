@@ -4,9 +4,17 @@ import { LIMITS } from '@/config/site'
 const CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
 const FOLDER = import.meta.env.VITE_CLOUDINARY_FOLDER || 'luvaleks'
 
+// Signing happens in the Vercel function at /api/cloudinary (keeps the API secret server-side).
 async function callFunction(body) {
-  const { data, error } = await supabase.functions.invoke('cloudinary', { body })
-  if (error) throw error
+  const { data: { session } } = await supabase.auth.getSession()
+  if (!session) throw new Error('Sign in to manage photos')
+  const res = await fetch('/api/cloudinary', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.access_token}` },
+    body: JSON.stringify(body),
+  })
+  const data = await res.json().catch(() => ({}))
+  if (!res.ok) throw new Error(data.error?.message || data.error || 'Image service error')
   return data
 }
 
